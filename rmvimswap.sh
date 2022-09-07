@@ -20,8 +20,24 @@ else
 	else
 		echo "'${PATHTOSWAPS}' does not exist! Do you want to create one? [y/N]"
 		read create
+		if [ -z "$create" ]; then
+			create="N"
+		fi
 		if [ "${create^}" = "Y" ]; then
 			mkdir -p $PATHTOSWAPS
+			if [ ! -f /home/$(whoami)/.vimrc ]; then
+				echo "You do not have .vimrc in your home! Do you want to create one? [y/N]"
+				read createvimrc
+				if [ -z "$createvimrc" ]; then
+					createvimrc="N"
+				fi
+				if [ "${createvimrc^}" = "Y" ]; then
+					touch /home/$(whoami)/.vimrc
+					echo "set directory=$HOME/.cache/vim/swap//" >> /home/$(whoami)/.vimrc
+				elif [ "${createvimrc^}" = "N" ]; then
+					exit
+				fi
+			fi
 		elif [ "${create^}" = "N" ]; then
 			exit
 		else
@@ -29,3 +45,4 @@ else
 		fi
 	fi
 fi
+	
